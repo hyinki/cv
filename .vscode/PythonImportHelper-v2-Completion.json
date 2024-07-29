@@ -1,0 +1,158 @@
+[
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "yaml",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "yaml",
+        "description": "yaml",
+        "detail": "yaml",
+        "documentation": {}
+    },
+    {
+        "label": "SafeLoader",
+        "importPath": "yaml.loader",
+        "description": "yaml.loader",
+        "isExtraImport": true,
+        "detail": "yaml.loader",
+        "documentation": {}
+    },
+    {
+        "label": "SafeLoader",
+        "importPath": "yaml.loader",
+        "description": "yaml.loader",
+        "isExtraImport": true,
+        "detail": "yaml.loader",
+        "documentation": {}
+    },
+    {
+        "label": "streamlit",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "streamlit",
+        "description": "streamlit",
+        "detail": "streamlit",
+        "documentation": {}
+    },
+    {
+        "label": "webrtc_streamer",
+        "importPath": "streamlit_webrtc",
+        "description": "streamlit_webrtc",
+        "isExtraImport": true,
+        "detail": "streamlit_webrtc",
+        "documentation": {}
+    },
+    {
+        "label": "av",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "av",
+        "description": "av",
+        "detail": "av",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO_Pred",
+        "importPath": "predictions",
+        "description": "predictions",
+        "isExtraImport": true,
+        "detail": "predictions",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO_Pred",
+        "importPath": "predictions",
+        "description": "predictions",
+        "isExtraImport": true,
+        "detail": "predictions",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO_Pred",
+        "kind": 6,
+        "importPath": "2_prediction.predictions",
+        "description": "2_prediction.predictions",
+        "peekOfCode": "class YOLO_Pred():\n    def __init__(self,onnx_model,data_yaml):\n        # load YAML\n        with open(data_yaml,mode='r') as f:\n            data_yaml = yaml.load(f,Loader=SafeLoader)\n        self.labels = data_yaml['names']\n        self.nc = data_yaml['nc']\n        # load YOLO model\n        self.yolo = cv2.dnn.readNetFromONNX(onnx_model)\n        self.yolo.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)",
+        "detail": "2_prediction.predictions",
+        "documentation": {}
+    },
+    {
+        "label": "video_frame_callback",
+        "kind": 2,
+        "importPath": "3_webapp.pages.yolo",
+        "description": "3_webapp.pages.yolo",
+        "peekOfCode": "def video_frame_callback(frame):\n    img = frame.to_ndarray(format=\"bgr24\")\n    # any operation \n    #flipped = img[::-1,:,:]\n    pred_img = yolo.predictions(img)\n    return av.VideoFrame.from_ndarray(pred_img, format=\"bgr24\")\nwebrtc_streamer(key=\"example\", \n                video_frame_callback=video_frame_callback,\n                media_stream_constraints={\"video\":True,\"audio\":False})",
+        "detail": "3_webapp.pages.yolo",
+        "documentation": {}
+    },
+    {
+        "label": "yolo",
+        "kind": 5,
+        "importPath": "3_webapp.pages.yolo",
+        "description": "3_webapp.pages.yolo",
+        "peekOfCode": "yolo = YOLO_Pred('./models/best.onnx',\n                 './models/data.yaml')\ndef video_frame_callback(frame):\n    img = frame.to_ndarray(format=\"bgr24\")\n    # any operation \n    #flipped = img[::-1,:,:]\n    pred_img = yolo.predictions(img)\n    return av.VideoFrame.from_ndarray(pred_img, format=\"bgr24\")\nwebrtc_streamer(key=\"example\", \n                video_frame_callback=video_frame_callback,",
+        "detail": "3_webapp.pages.yolo",
+        "documentation": {}
+    },
+    {
+        "label": "upload_image",
+        "kind": 2,
+        "importPath": "3_webapp.Home",
+        "description": "3_webapp.Home",
+        "peekOfCode": "def upload_image():\n    # Upload Image\n    image_file = st.file_uploader(label='Upload Image', type=['png', 'jpg', 'jpeg'])\n    if image_file is not None:\n        size_mb = image_file.size / (1024 ** 2)\n        file_details = {\n            \"filename\": image_file.name,\n            \"filetype\": image_file.type,\n            \"filesize\": f\"{size_mb:.2f} MB\"\n        }",
+        "detail": "3_webapp.Home",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "3_webapp.Home",
+        "description": "3_webapp.Home",
+        "peekOfCode": "def main():\n    st.sidebar.header(\"Image Upload\")\n    uploaded_object = upload_image()\n    if uploaded_object:\n        image_obj = Image.open(uploaded_object['file'])\n        # Displaying image and details\n        st.sidebar.subheader('File Details')\n        st.sidebar.json(uploaded_object['details'])\n        st.image(image_obj, caption='Uploaded Image', use_column_width=True)\n        if st.sidebar.button('Get Detection from YOLO'):",
+        "detail": "3_webapp.Home",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO_Pred",
+        "kind": 6,
+        "importPath": "3_webapp.predictions",
+        "description": "3_webapp.predictions",
+        "peekOfCode": "class YOLO_Pred():\n    def __init__(self,onnx_model,data_yaml):\n        # load YAML\n        with open(data_yaml,mode='r') as f:\n            data_yaml = yaml.load(f,Loader=SafeLoader)\n        self.labels = data_yaml['names']\n        self.nc = data_yaml['nc']\n        # load YOLO model\n        self.yolo = cv2.dnn.readNetFromONNX(onnx_model)\n        self.yolo.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)",
+        "detail": "3_webapp.predictions",
+        "documentation": {}
+    }
+]
